@@ -1,0 +1,10 @@
+@LapcraftServer_HostAddress = http://localhost:5273
+
+POST {{LapcraftServer_HostAddress}}/api/auth/register
+Accept: application/json
+
+POST {{LapcraftServer_HostAddress}}/api/auth/login
+Accept: application/json
+
+
+###
