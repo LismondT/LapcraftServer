@@ -16,13 +16,16 @@ public class AuthService(
 
     public async Task<bool> Register(RegisterDto registerDto)
     {
-        string passwordHash = _passwordHasherService.Generate(registerDto.Password);
+        string salt = _passwordHasherService.GenerateSalt();
+        string passwordWithSalt = registerDto.Password + salt;
+        string passwordHash = _passwordHasherService.Generate(passwordWithSalt);
 
         User user = User.Create(
             Guid.NewGuid(),
             registerDto.Username,
             registerDto.Email,
-            passwordHash
+            passwordHash,
+            salt
         );
 
         await _userRepository.AddUser(user);
@@ -40,8 +43,8 @@ public class AuthService(
             return string.Empty;
         }
 
-        bool result = _passwordHasherService.Verify(loginDto.Password, user.PasswordHash);
-
+        bool result = _passwordHasherService.Verify(loginDto.Password, user.PasswordHash, user.PasswordSalt);
+        
         if (result == false)
         {
             return string.Empty;
