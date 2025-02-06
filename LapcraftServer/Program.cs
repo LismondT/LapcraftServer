@@ -7,6 +7,8 @@ using LapcraftServer.Application.Interfaces.Auth;
 using LapcraftServer.Application.Services;
 using LapcraftServer.Infastructure.Services.Auth;
 using LapcraftServer.Persistens.Repositories;
+using LapcraftServer.Persistens;
+using Microsoft.EntityFrameworkCore;
 
 namespace LapcraftServer.Api;
 
@@ -72,6 +74,12 @@ public class Program
         builder.Services.AddOpenApi();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+
+        //BD
+        builder.Services.AddDbContext<LapcraftDbContext>(
+            options => {
+                options.UseSqlite(builder.Configuration.GetConnectionString(nameof(LapcraftDbContext)));
+            });
 
         //DI
 

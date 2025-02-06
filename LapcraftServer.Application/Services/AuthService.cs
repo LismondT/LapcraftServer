@@ -21,7 +21,6 @@ public class AuthService(
         string passwordHash = _passwordHasherService.Generate(passwordWithSalt);
 
         User user = User.Create(
-            Guid.NewGuid(),
             registerDto.Username,
             registerDto.Email,
             passwordHash,

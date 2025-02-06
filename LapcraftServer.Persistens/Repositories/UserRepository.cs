@@ -1,25 +1,28 @@
-﻿using LapcraftServer.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+
+using LapcraftServer.Domain.Entities;
 using LapcraftServer.Domain.Interfaces;
 
 namespace LapcraftServer.Persistens.Repositories;
 
 //TODO: Implement sqlite
-public class UserRepository : IUserRepository
+public class UserRepository(LapcraftDbContext context) : IUserRepository
 {
-	private static readonly IDictionary<string, User> _users = new Dictionary<string, User>();
+	private readonly LapcraftDbContext _context = context;
 
-	public async Task AddUser(User user)
+    public async Task AddUser(User user)
 	{
-		_users[user.Username] = user;
+		await _context.Users.AddAsync(user);
+		await _context.SaveChangesAsync();
 	}
 
 	public async Task<User?> GetUserByUsername(string username)
 	{
-		return _users.TryGetValue(username, out User? user) ? user : null;
+		return await _context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Username == username);
 	}
 
 	public async Task<IEnumerable<User>> GetAllUsers()
 	{
-		return _users.Values;
+		return await _context.Users.AsNoTracking().ToListAsync();
 	}
 }
