@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LapcraftServer.Persistens.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -19,7 +19,8 @@ namespace LapcraftServer.Persistens.Migrations
                     Username = table.Column<string>(type: "TEXT", nullable: false),
                     Email = table.Column<string>(type: "TEXT", nullable: false),
                     PasswordHash = table.Column<string>(type: "TEXT", nullable: false),
-                    PasswordSalt = table.Column<string>(type: "TEXT", nullable: false)
+                    PasswordSalt = table.Column<string>(type: "TEXT", nullable: false),
+                    IsAdmin = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {

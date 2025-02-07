@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LapcraftServer.Persistens.Migrations
 {
     [DbContext(typeof(LapcraftDbContext))]
-    [Migration("20250206030202_initial")]
-    partial class initial
+    [Migration("20250207003918_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -29,6 +29,9 @@ namespace LapcraftServer.Persistens.Migrations
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()

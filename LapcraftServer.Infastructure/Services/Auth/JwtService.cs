@@ -20,9 +20,14 @@ public class JwtService(IConfiguration configuration) : IJwtService
 		SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes(keyValue));
 		SigningCredentials credentials = new(key, SecurityAlgorithms.HmacSha256);
 
-		Claim[] claims = [
+		List<Claim> claims = [
 			new Claim(JwtRegisteredClaimNames.Jti, user.Id.ToString()),
 		];
+
+		if (user.IsAdmin)
+		{
+			claims.Add(new Claim("Admin", "true"));
+		}
 
 		JwtSecurityToken token = new(
 			issuer: jwtSettings["Issuer"],

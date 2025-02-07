@@ -21,10 +21,11 @@ public class AuthService(
         string passwordHash = _passwordHasherService.Generate(passwordWithSalt);
 
         User user = User.Create(
-            registerDto.Username,
-            registerDto.Email,
-            passwordHash,
-            salt
+            username: registerDto.Username,
+            email: registerDto.Email,
+            passwordHash: passwordHash,
+            passwordSalt: salt,
+            isAdmin: false
         );
 
         await _userRepository.AddUser(user);

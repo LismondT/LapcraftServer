@@ -6,7 +6,7 @@ using LapcraftServer.Domain.Entities;
 
 namespace LapcraftServer.Api.Controllers;
 
-[Authorize]
+[Authorize (Policy = "AdminPolicy")]
 [ApiController]
 [Route("api/[controller]")]
 public class UsersController : ControllerBase

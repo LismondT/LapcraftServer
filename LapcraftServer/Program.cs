@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.EntityFrameworkCore;
 using System.Text;
 
 using LapcraftServer.Domain.Interfaces;
@@ -8,7 +9,6 @@ using LapcraftServer.Application.Services;
 using LapcraftServer.Infastructure.Services.Auth;
 using LapcraftServer.Persistens.Repositories;
 using LapcraftServer.Persistens;
-using Microsoft.EntityFrameworkCore;
 
 namespace LapcraftServer.Api;
 
@@ -41,11 +41,10 @@ public class Program
 
     public static void ConfigureServices(WebApplicationBuilder builder)
     {
-        //Auth options
+        //Authentication
         string jwtKeyValue = builder.Configuration.GetSection("Jwt")["Key"]
             ?? throw new Exception("Key value for jwt token was not founded");
 
-        builder.Services.AddAuthorization();
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options => {
                 options.TokenValidationParameters = new TokenValidationParameters()
@@ -68,9 +67,18 @@ public class Program
                     }
                 };
             });
+ 
+        //Authorization
+        builder.Services.AddAuthorizationBuilder()
+            .AddPolicy("AdminPolicy", policy => 
+            {
+                policy.RequireClaim("Admin", "true");
+            });
 
+        //Contollers
         builder.Services.AddControllers();
-     
+
+        //Swagger     
         builder.Services.AddOpenApi();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
