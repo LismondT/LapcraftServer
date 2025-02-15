@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
 using LapcraftServer.Api.Contracts.Auth;
-using LapcraftServer.Application.DTOs;
 using LapcraftServer.Application.Interfaces.Auth;
+using LapcraftServer.Application.DTOs.Auth;
 
 namespace LapcraftServer.Api.Controllers;
 
@@ -22,33 +22,55 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
 	public async Task<IActionResult> Register([FromBody] RegisterUserRequest request)
 	{
-		await _authService.Register(new RegisterDto() {
-			Username = request.Username,
-			Email = request.Email,
-			Password = request.Password,
-		});
+        AccessAndRefreshTokens? success = await _authService.Register(new RegisterDto(
+			request.Username,
+			request.Email,
+			request.Password));
 
-		return Ok();
+		if (success == null)
+		{
+			return BadRequest("Registration was failed. Try again");
+		}
+
+		Response.Cookies.Append("syndetheite", success.AccessToken);
+
+		return Ok(success);
 	}
 
 
 	[HttpPost("login")]
 	public async Task<IActionResult> Login([FromBody] LoginUserRequest request)
 	{
-        string token = await _authService.Login(new LoginDto() {
-			 Username = request.Username,
-			 Password = request.Password,
-		});
+        AccessAndRefreshTokens? success = await _authService.Login(new LoginDto(
+			request.Username,
+			request.Password));
 
-		if (string.IsNullOrEmpty(token))
+		if (success == null)
 		{
-			return BadRequest("User not founded"); 
+			return BadRequest("User not founded. Password or username is incorrect"); 
 		}
 		
 		//from Greek "syndetheite" is "log in"
-		Response.Cookies.Append("syndetheite", token);
+		Response.Cookies.Append("syndetheite", success.AccessToken);
 
-		return Ok(token);
+		return Ok(success);
+	}
+
+
+	[HttpPost("refresh")]
+	public async Task<IActionResult> Refresh([FromBody] RefreshTokenRequest request)
+	{
+        AccessAndRefreshTokens? success = await _authService.RefreshToken(new RefreshTokenDto(
+			request.RefreshToken));
+
+		if (success == null)
+		{
+			return BadRequest("Refresh token is exired");
+		}
+
+		Response.Cookies.Append("syndetheite", success.AccessToken);
+
+		return Ok(success);
 	}
 
 }

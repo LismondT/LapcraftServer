@@ -20,6 +20,8 @@ namespace LapcraftServer.Persistens.Migrations
                     Email = table.Column<string>(type: "TEXT", nullable: false),
                     PasswordHash = table.Column<string>(type: "TEXT", nullable: false),
                     PasswordSalt = table.Column<string>(type: "TEXT", nullable: false),
+                    RefreshToken_Expires = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    RefreshToken_Token = table.Column<string>(type: "TEXT", nullable: true),
                     IsAdmin = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>

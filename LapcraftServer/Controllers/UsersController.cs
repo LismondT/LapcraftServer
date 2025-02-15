@@ -23,7 +23,7 @@ public class UsersController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAllUsers()
     {
-        IEnumerable<User> users = await _userRepository.GetAllUsers();
+        IEnumerable<User> users = await _userRepository.GetAll();
 
         return Ok(users);
     }

@@ -1,6 +1,7 @@
-﻿using LapcraftServer.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+
+using LapcraftServer.Domain.Entities;
 using LapcraftServer.Persistens.Configurations;
-using Microsoft.EntityFrameworkCore;
 
 namespace LapcraftServer.Persistens;
 

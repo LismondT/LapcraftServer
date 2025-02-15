@@ -46,6 +46,31 @@ namespace LapcraftServer.Persistens.Migrations
 
                     b.ToTable("Users");
                 });
+
+            modelBuilder.Entity("LapcraftServer.Domain.Entities.User", b =>
+                {
+                    b.OwnsOne("LapcraftServer.Domain.Entities.Auth.RefreshToken", "RefreshToken", b1 =>
+                        {
+                            b1.Property<Guid>("UserId")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<DateTime>("Expires")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("Token")
+                                .IsRequired()
+                                .HasColumnType("TEXT");
+
+                            b1.HasKey("UserId");
+
+                            b1.ToTable("Users");
+
+                            b1.WithOwner()
+                                .HasForeignKey("UserId");
+                        });
+
+                    b.Navigation("RefreshToken");
+                });
 #pragma warning restore 612, 618
         }
     }

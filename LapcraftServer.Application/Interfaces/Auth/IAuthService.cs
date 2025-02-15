@@ -1,9 +1,10 @@
-﻿using LapcraftServer.Application.DTOs;
+﻿using LapcraftServer.Application.DTOs.Auth;
 
 namespace LapcraftServer.Application.Interfaces.Auth;
 
 public interface IAuthService
 {
-    Task<string> Login(LoginDto loginDto);
-    Task<bool> Register(RegisterDto registerDto);
+    Task<AccessAndRefreshTokens?> Login(LoginDto loginDto);
+    Task<AccessAndRefreshTokens?> Register(RegisterDto registerDto);
+    Task<AccessAndRefreshTokens?> RefreshToken(RefreshTokenDto refreshTokenDto);
 }

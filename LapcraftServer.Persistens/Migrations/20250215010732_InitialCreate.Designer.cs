@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LapcraftServer.Persistens.Migrations
 {
     [DbContext(typeof(LapcraftDbContext))]
-    [Migration("20250207003918_InitialCreate")]
+    [Migration("20250215010732_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -48,6 +48,31 @@ namespace LapcraftServer.Persistens.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("LapcraftServer.Domain.Entities.User", b =>
+                {
+                    b.OwnsOne("LapcraftServer.Domain.Entities.Auth.RefreshToken", "RefreshToken", b1 =>
+                        {
+                            b1.Property<Guid>("UserId")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<DateTime>("Expires")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("Token")
+                                .IsRequired()
+                                .HasColumnType("TEXT");
+
+                            b1.HasKey("UserId");
+
+                            b1.ToTable("Users");
+
+                            b1.WithOwner()
+                                .HasForeignKey("UserId");
+                        });
+
+                    b.Navigation("RefreshToken");
                 });
 #pragma warning restore 612, 618
         }
